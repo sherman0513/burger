@@ -1,0 +1,40 @@
+<div class="container">
+
+    <h1>MMMMMMMMM Burgers!!!!!!</h1>
+
+    <form class="create-form">
+        <div class="form-group">
+            <label for="name"></label>
+            <textarea id="name" name="burger_name" rows="2" cols="40" placeholder="What do you want to eat?"></textarea>
+        </div>
+        <button type="submit">Add Burger</button>
+    </form>
+
+    <br>
+
+    <section class="row">
+        <div class="col-md-7 col-left">
+            <table>
+                {{#each burgers}}
+                {{#unless devoured}}
+                <div class="input-group">
+                    <li class="form-control">{{id}}. {{burger_name}}</li>
+                    <span class="input-group-btn">
+                        <button class="btn btn-success devour-button" type="submit">Devour It!</button>
+                    </span>
+                </div>
+                {{/unless}}
+                {{/each}}
+            </table>
+        </div>
+        <div class="col-md-5 col-right">
+            {{#each burgers}}
+            {{#if devoured}}
+            <div>{{id}}. {{burger_name}}</div>
+            {{/if}}
+            {{/each}}
+        </div>
+    </section>
+
+</div>
+

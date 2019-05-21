@@ -1,9 +1,5 @@
 let connection = require('../config/connection.js');
 
-selectAll()
-insertOne()
-updateOne()
-
 function printQuestionMarks(num) {
     let arr = [];
 
@@ -30,19 +26,62 @@ function objectToSql(obj) {
 
 
 let orm = {
-    selectAll: (tableInput, callback) => {
-        let queryString = 'select * from' + tableInput + ';';
+    all: (table, cb) => {
+        let queryString = 'SELECT * FROM ' + table + ';';
         connection.query(queryString, (error, result) => {
             if (error) {
-                throw error
-            };
-            callback(result)
-        })
+                throw error;
+            }
+            // console.log(result);
+            cb(result);
+        });
     },
-    insertOne: () => {
+    create: (table, cols, vals, cb) => {
+        let queryString = "INSERT INTO " + table;
 
+        queryString += " (";
+        queryString += cols.toString();
+        queryString += ") ";
+        queryString += "VALUES (";
+        queryString += printQuestionMarks(vals.length);
+        queryString += ") ";
+
+        connection.query(queryString, vals, (error, result) => {
+            if (error) {
+                throw error;
+            }
+            cb(result);
+        });
     },
-    updateOne: () => {
+    update: (table, objColVals, condition, cb) => {
+        let queryString = "UPDATE " + table;
 
+        queryString += " SET ";
+        queryString += objectToSql(objColVals);
+        queryString += " WHERE ";
+        queryString += condition;
+        
+        connection.query(queryString, (error, result) => {
+            if (error) {
+                throw error;
+            }
+            cb(result);
+        });
+    },
+    delete: (table, condition, cb) => {
+        let queryString = 'DELETE FROM ' + table;
+
+        queryString += 'WHERE';
+        queryString += condition;
+
+        connection.query(queryString, (error, result) => {
+            if (error) {
+                throw error;
+            }
+            cb(result);
+        });
     }
-}
+};
+
+module.exports = orm;
+
